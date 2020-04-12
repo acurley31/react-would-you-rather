@@ -6,7 +6,7 @@ const RECEIVE_USERS = 'RECEIVE_USERS'
 
 
 // Synchronous action creators
-const receiveUsers = (users) => ({
+export const receiveUsers = (users) => ({
     type: RECEIVE_USERS,
     users,
 })
