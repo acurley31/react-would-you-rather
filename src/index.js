@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import './index.css';
+import reducer from './reducers';
+import middleware from './middleware';
 import App from './components/App';
 
 
 // Create the store
-//  - TODO: currently using an empty object
-let store = {}
+let store = createStore(reducer, middleware)
 
 
 // Mount the app on the DOM

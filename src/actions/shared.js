@@ -4,7 +4,7 @@ import { receiveQuestions } from './questions';
 
 
 // Action types
-const RECEIVE_INITIAL_DATA = 'RECEIVE_INITIAL_DATA';
+export const RECEIVE_INITIAL_DATA = 'RECEIVE_INITIAL_DATA';
 
 
 // Asynchronous action creators

@@ -2,7 +2,7 @@ import { getUsers } from '../utils/api';
 
 
 // Action types
-const RECEIVE_USERS = 'RECEIVE_USERS'
+export const RECEIVE_USERS = 'RECEIVE_USERS'
 
 
 // Synchronous action creators
@@ -15,7 +15,7 @@ export const receiveUsers = (users) => ({
 // Asynchronous action creators
 export const handleGetUsers = () => {
     return (dispatch) => {
-        return api.getUsers()
+        return getUsers()
             .then((users) => dispatch(receiveUsers(users)))
     }
 }

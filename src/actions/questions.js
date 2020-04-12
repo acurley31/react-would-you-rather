@@ -6,9 +6,9 @@ import {
 
 
 // Action types
-const RECEIVE_QUESTIONS = 'RECEIVE_QUESTIONS';
-const SAVE_QUESTION = 'SAVE_QUESTION';
-const SAVE_QUESTION_ANSWER = 'SAVE_QUESTION_ANSWER';
+export const RECEIVE_QUESTIONS = 'RECEIVE_QUESTIONS';
+export const ADD_QUESTION = 'ADD_QUESTION';
+export const ADD_QUESTION_ANSWER = 'ADD_QUESTION_ANSWER';
 
 
 // Synchronous action creators
@@ -17,12 +17,12 @@ export const receiveQuestions = (questions) => ({
     questions,
 })
 
-export const saveQuestion = (question) => ({
-    type: SAVE_QUESTION,
+export const addQuestion = (question) => ({
+    type: ADD_QUESTION,
     question,
 })
 
-export const saveQuestionAnswer = () => ({
+export const addQuestionAnswer = () => ({
     // TODO: implement synchronous save question answer
 })
 
@@ -35,14 +35,14 @@ export const handleGetQuestions = () => {
     }
 }
 
-export const handleSaveQuestion = (question) => {
+export const handleAddQuestion = (question) => {
     return (dispatch) => {
         return saveQuestion(question)
-            .then((data) => dispatch(saveQuestion(data)))
+            .then((data) => dispatch(addQuestion(data)))
     }
 }
 
-export const handleSaveQuestionAnswer = (uid, qid, answer) => {
+export const handleAddQuestionAnswer = (uid, qid, answer) => {
     // TODO: implement asynchronous handle save question answer
 }
 
