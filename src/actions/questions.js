@@ -1,3 +1,4 @@
+import { showLoading, hideLoading } from 'react-redux-loading-bar'
 import {
     getQuestions,
     saveQuestion,
@@ -22,8 +23,11 @@ export const addQuestion = (question) => ({
     question,
 })
 
-export const addQuestionAnswer = () => ({
-    // TODO: implement synchronous save question answer
+export const addQuestionAnswer = (authedUser, qid, answer) => ({
+    type: ADD_QUESTION_ANSWER,
+    authedUser,
+    qid,
+    answer,
 })
 
 
@@ -37,12 +41,20 @@ export const handleGetQuestions = () => {
 
 export const handleAddQuestion = (question) => {
     return (dispatch) => {
+        dispatch(showLoading())
         return saveQuestion(question)
             .then((data) => dispatch(addQuestion(data)))
+            .then(() => dispatch(hideLoading()))
     }
 }
 
-export const handleAddQuestionAnswer = (uid, qid, answer) => {
-    // TODO: implement asynchronous handle save question answer
+export const handleAddQuestionAnswer = (authedUser, qid, answer) => {
+    return (dispatch) => {
+        dispatch(showLoading())
+        dispatch(addQuestionAnswer(authedUser, qid, answer))
+        return saveQuestionAnswer({ authedUser, qid, answer })
+            .catch(() => console.log('error'))
+            .then(() => dispatch(hideLoading()))
+    }
 }
 

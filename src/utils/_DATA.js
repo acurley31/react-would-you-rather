@@ -1,8 +1,13 @@
+import girl1 from '../assets/girl1.svg';
+import man1 from '../assets/man1.svg';
+import man2 from '../assets/man2.svg';
+
+
 let users = {
   sarahedo: {
     id: 'sarahedo',
     name: 'Sarah Edo',
-    avatarURL: '../../images/snow.jpg',
+    avatarURL: girl1,
     answers: {
       "8xf0y6ziyjabvozdd253nd": 'optionOne',
       "6ni6ok3ym7mf1p33lnez": 'optionOne',
@@ -14,7 +19,7 @@ let users = {
   tylermcginnis: {
     id: 'tylermcginnis',
     name: 'Tyler McGinnis',
-    avatarURL: '../../images/tyler.jpg',
+    avatarURL: man1,
     answers: {
       "vthrdm985a262al8qx3do": 'optionOne',
       "xj352vofupe1dqz9emx13r": 'optionTwo',
@@ -24,7 +29,7 @@ let users = {
   johndoe: {
     id: 'johndoe',
     name: 'John Doe',
-    avatarURL: '../../images/leaf.jpg',
+    avatarURL: man2,
     answers: {
       "xj352vofupe1dqz9emx13r": 'optionOne',
       "vthrdm985a262al8qx3do": 'optionTwo',
@@ -53,11 +58,11 @@ let questions = {
     author: 'johndoe',
     timestamp: 1468479767190,
     optionOne: {
-      votes: [],
+      votes: ['sarahedo'],
       text: 'become a superhero',
     },
     optionTwo: {
-      votes: ['johndoe', 'sarahedo'],
+      votes: ['johndoe'],
       text: 'become a supervillian'
     }
   },

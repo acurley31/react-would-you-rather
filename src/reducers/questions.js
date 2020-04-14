@@ -12,16 +12,28 @@ const questions = (state = {}, action) => {
             const { questions } = action
             return {
                 ...state,
-                questions,
+                ...questions,
             }
 
         case ADD_QUESTION:
-            // TODO: implement add question
-            return state
+            const { question } = action
+            return {
+                ...state,
+                [question.id]: question,
+            }
 
         case ADD_QUESTION_ANSWER:
-            // TODO: implement add question answer
-            return state
+            const { authedUser, qid, answer } = action
+            return {
+                ...state,
+                [qid]: {
+                    ...state[qid],
+                    [answer]: {
+                        ...state[qid][answer],
+                        votes: state[qid][answer].votes.concat([authedUser]),
+                    }
+                }
+            }
 
         default:
             return state
