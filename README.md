@@ -22,5 +22,5 @@ This is a React application to allow users to ask and answer "Would you rather?"
 Upon first interacting (or accessing a page via the address bar), you will be prompted to log in. Simply select your user from the dropdown menu and continue!
 
 
-**Sources**
-All avatar icons were made by ![IconAuthor](https://www.flaticon.com/authors/freepik "Freepik") and downloaded from ![FlatIcon](https://www.flaticon.com/home FlatIcon")
+## Sources
+All avatar icons were made by <a href="https://www.flaticon.com/authors/freepik">Freepik</a> and downloaded from <a href="https://www.flaticon.com/home">FlatIcon</a>
