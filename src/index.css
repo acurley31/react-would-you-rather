@@ -473,3 +473,12 @@ html, body {
     font-size: 24px;
     font-weight: 500;
 }
+
+/* Error */
+.error-container {
+    text-align: center;
+    margin-top: 72px;
+    font-size: 32px;
+    font-weight: 500;
+    color: red;
+}

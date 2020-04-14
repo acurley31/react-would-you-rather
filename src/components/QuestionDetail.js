@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import QuestionOptionResult from './QuestionOptionResult';
+import Error from './Error';
 
 
 class QuestionDetail extends Component {
@@ -9,8 +10,11 @@ class QuestionDetail extends Component {
     render() {
         const { question, authedUser, hasAnswered } = this.props
 
-        // Redirect to the dashboard if the user has not answered
-        if (!hasAnswered || !question) {
+        if (!question) {
+            return <Error /> 
+        }
+
+        if (!hasAnswered) {
             return <Redirect exact to='/' />
         }
 
@@ -63,15 +67,13 @@ class QuestionDetail extends Component {
 const mapStateToProps = ({ authedUser, users, questions }, { match }) => {
     const { id } = match.params
     const question = questions[id]
-    const author = question ? users[question.author] : null
+        ? {...questions[id], author: users[questions[id].author] }
+        : null
     const user = users[authedUser]
     const hasAnswered = user && user.answers[id] ? true : false
 
     return {
-        question: {
-            ...question,
-            author,
-        },
+        question,
         authedUser: user,
         hasAnswered,
     }
