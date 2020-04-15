@@ -1,11 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import { handleGetUsers } from '../actions/users';
 import { setAuthedUser } from '../actions/authedUser';
 
 
 class Login extends Component {
     state = {
         id: '',
+    }
+
+    componentDidMount() {
+        this.props.dispatch(handleGetUsers())
     }
 
     updateId = (e) => {
@@ -23,15 +29,19 @@ class Login extends Component {
     }
 
     render() {
-        const users = this.props.users
-            ? Object.keys(this.props.users).map(id => this.props.users[id])
-            : []
-
+        const { users, isAuthenticated, location } = this.props
+        const redirectLocation = location.state ? location.state.from.pathname : '/'
         const { id } = this.state
         const isDisabled = id && id !== '' ? false : true
 
+        // Once the user has logged in, redirect to the referred location
+        if (isAuthenticated) {
+            return <Redirect to={redirectLocation} />
+        }
+
+        // Otherwise, render the login form
         return (
-            <div className='login-container'>
+            <div className='container'>
                 <div className='login-card'>
                     <h3 className='login-header'>Login</h3>
 
@@ -52,7 +62,7 @@ class Login extends Component {
 
                         <button
                             type='submit' 
-                            className='login-button'
+                            className='outline-button'
                             disabled={isDisabled}>
                             Login
                         </button>
@@ -63,8 +73,9 @@ class Login extends Component {
     }
 }
 
-const mapStateToProps = ({ users }) => ({
-    users,
+const mapStateToProps = ({ authedUser, users }) => ({
+    isAuthenticated: authedUser ? true : false,
+    users: Object.keys(users).map(id => users[id]),
 })
 
 export default connect(mapStateToProps)(Login);

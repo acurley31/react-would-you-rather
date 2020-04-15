@@ -1,68 +1,79 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import Question from './Question';
-
+import QuestionCard from './QuestionCard';
+import QuestionPreview from './QuestionPreview';
 
 class Dashboard extends Component {
-    tabs = ['Questions', 'Responses']; 
-    
     state = {
-        activeTabId: 0,
-    }
-
-    toggleQuestions = (id) => {
-        this.setState({ activeTabId: id })
-    }
-    
-    getQuestions = () => {
-        const { answered, unanswered } = this.props
-        return this.state.activeTabId === 0 ? unanswered : answered;
+        selectedTab: 0,
     }
 
     render() {
-        const questions = this.getQuestions()
+        
+        // If loading, render a blank component
+        if (this.props.isLoading) {
+            return <div></div>
+        }
 
+        // Select the appropriate questions based on the toggle
+        const { answered, unanswered } = this.props
+        const questions = this.state.selectedTab === 0
+            ? unanswered
+            : answered
+        
         return (
-            <div className='dashboard-container'>
-                <div className='dashboard-content'>
-                    <div className='dashboard-question-list-header'>
-                        { this.tabs.map( (tab, tabId) => (
-                            <div key={tab} className='dashboard-toggle' 
-                                data-active={this.state.activeTabId === tabId}
-                                onClick={() => this.toggleQuestions(tabId)}>
-                                { tab }
-                            </div>
-                        ))}
-                    </div>
-                    <ul className='dashboard-question-list'>
+            <div className='container'>
+                <div className='dashboard-question-toggle'>
+                    <button 
+                        className='outline-button dashboard-question-toggle-button'
+                        data-active={this.state.selectedTab === 0}
+                        onClick={(e) => this.setState({ selectedTab: 0 })}>
+                        Unanswered Questions
+                    </button>
+                    <button 
+                        className='outline-button dashboard-question-toggle-button'
+                        data-active={this.state.selectedTab === 1}
+                        onClick={(e) => this.setState({ selectedTab: 1 })}>
+                        Answered Questions
+                    </button>
+                </div>
+
+                <ul className='question-list'>
                     { questions.map(question => (
                         <li key={question.id}>
-                            <Question id={question.id}/>
+                            <QuestionCard 
+                                question={question}
+                                component={<QuestionPreview question={question}/>}
+                            />
                         </li>
                     ))}
-                    </ul>
-
-                </div>
-            
+                </ul>
             </div>
         )
     }
 }
 
-const mapStateToProps = ({ users, questions, authedUser }) => {
+const mapStateToProps = ({ users, questions, authedUser, loadingBar }) => {
 
+    const isLoading = loadingBar.default === 1 ? true : false
     const user = users[authedUser];
 
     const answered = user 
         ? Object.keys(user.answers)
-            .map(id => questions[id])
+            .map(id => ({
+                ...questions[id], 
+                author: users[questions[id]?.author],
+            }))
             .sort((a, b) => b.timestamp - a.timestamp)
         : []
 
     const unanswered = user 
         ? Object.keys(questions)
             .filter(id => !user.answers[id])
-            .map(id => questions[id])
+            .map(id => ({
+                ...questions[id], 
+                author: users[questions[id]?.author]
+            }))
             .sort((a, b) => b.timestamp - a.timestamp)
         : []
 
@@ -70,6 +81,7 @@ const mapStateToProps = ({ users, questions, authedUser }) => {
         user,
         unanswered,
         answered,
+        isLoading,
     }
 }
 

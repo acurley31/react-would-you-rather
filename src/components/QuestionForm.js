@@ -1,66 +1,62 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
-import { handleAddQuestion } from '../actions/questions';
+import { handleAddQuestionAnswer } from '../actions/questions';
 
 
 class QuestionForm extends Component {
     state = {
-        optionOneText: '',
-        optionTwoText: '',
+        selectedText: 'optionOne',
     }
 
-    addQuestion = (e) => {
+    selectOption = (e) => {
+        this.setState({ selectedText: e.target.value })
+    }
+
+    saveQuestionAnswer = (e) => {
         e.preventDefault()
-        const { authedUser, dispatch } = this.props
-        const { optionOneText, optionTwoText } = this.state
-        const question = {
-            author: authedUser,
-            optionOneText,
-            optionTwoText
-        }
-        dispatch(handleAddQuestion(question))
-        this.props.history.push('/')
+        const { selectedText } = this.state
+        const { dispatch, question, authedUser } = this.props
+        dispatch(handleAddQuestionAnswer(authedUser, question.id, selectedText))
     }
 
     render() {
-        const { optionOneText, optionTwoText } = this.state
-        const isDisabled = (optionOneText === '') || (optionTwoText === '')
-
+        const { question } = this.props;
         return (
-            <div className='question-form-container'>
-                <h2>New Question</h2>
-                <form className='question-form' onSubmit={this.addQuestion}>
-                    <input 
-                        className='question-form-input'
-                        type='text' 
-                        value={optionOneText} 
-                        placeholder='Option 1' 
-                        onChange={(e) => this.setState({ optionOneText: e.target.value })}
-                        required 
+            <form className='question-response-form' onSubmit={this.saveQuestionAnswer}>
+                <h2 className='question-response-form-title'>Would you rather...</h2>
+                <div className='question-option'>
+                    <input
+                        id='optionOne'
+                        type='radio'
+                        value='optionOne'
+                        checked={this.state.selectedText === 'optionOne'}
+                        onChange={this.selectOption}
                     />
-                    
-                    <input 
-                        className='question-form-input'
-                        type='text' 
-                        value={optionTwoText} 
-                        placeholder='Option 2' 
-                        onChange={(e) => this.setState({ optionTwoText: e.target.value })}
-                        required 
+                    <label htmlFor='optionOne'>{ question?.optionOne.text }</label>
+                </div>
+                <div className='question-option'>
+                    <input
+                        id='optionTwo'
+                        type='radio'
+                        value='optionTwo'
+                        checked={this.state.selectedText === 'optionTwo'}
+                        onChange={this.selectOption}
                     />
-
-                    <button type='submit' className='question-form-button' disabled={isDisabled}>
-                        Save
-                    </button>
-                </form>
-            </div>
+                    <label htmlFor='optionTwo'>{ question?.optionTwo.text }</label>
+                </div>
+                <button 
+                    type='submit'
+                    className='outline-button'>
+                    Submit
+                </button>
+            </form>
         )
     }
 }
 
-const mapStateToProps = ({ authedUser }) => ({
+const mapStateToProps = ({ authedUser }, { question }) => ({
+    question,
     authedUser,
 })
 
-export default withRouter(connect(mapStateToProps)(QuestionForm))
-
+export default connect(mapStateToProps)(QuestionForm);
